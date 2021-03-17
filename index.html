@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradient Color Palette</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+</head>
+
+<body>
+    <div class="navbarr">
+        <a href="#">Quick Gradient</a>
+        <a href="https://jayprajapati.netlify.app/" target="_blank">Developer</a>
+        <i class="fa fa-adjust" onclick="toggleTheme()"></i>
+    </div>
+    <div class="container">
+        <main class="grid" id="grid"></main>
+    </div>
+    <div id="Toast">🎨 Gradient Color Copied</div>
+    <script>
+        
+        window.addEventListener('load', function () {
+            setTheme('theme-light');
+            fetch('app.json')
+                .then(gradient => {
+                    return gradient.json();
+                }).then((gradient) => {
+                    for (let a = 0; a < gradient.length; a++) {
+                        var content = document.getElementById("grid");
+                        content.innerHTML += `<article>
+                                                <div class="GR_Card" style="background-image: ${gradient[a].gradient};"></div>
+                                                <button onclick="color(${gradient[a].id});" class="btn btn-outline-primary btn-sm">Copy</button>
+                                                <p class="Value">background-image: ${gradient[a].gradient}</p>
+                                              </article>`;
+                    }
+                }).catch(function (error) {
+                    content.innerHTML = `<div class="ErrorBox">
+                                            <h5>Something Went Wrong</h5>   
+                                         </div>`;
+                });
+        });
+        //let colors = document.getElementsByClassName('color');
+        let values = document.getElementsByClassName('Value');
+
+        /*---unused code
+        let val = document.getElementById("mybtn");
+        for (let indx = 0; indx < val.length; indx++) {
+            
+        }
+        */
+        function color(index) {
+            // let popup = document.getElementById('popup');
+            let copy = document.createElement('textarea');
+            copy.value = values[index].innerHTML;
+            // popup.innerHTML = "<strong>" + values[index].innerHTML + "</strong>" + " has been copied.";
+            document.body.appendChild(copy);
+            copy.select();
+            document.execCommand('copy');
+            document.body.removeChild(copy);
+
+
+            var Toast_x = document.getElementById("Toast");
+            Toast_x.className = "show";
+            setTimeout(function () {
+                Toast_x.className = Toast_x.className.replace("show", "");
+            }, 2000);
+        }
+        // function to set a given theme/color-scheme
+        function setTheme(themeName) {
+            localStorage.setItem('theme', themeName);
+            document.documentElement.className = themeName;
+        }
+
+        // function to toggle between light and dark theme
+        function toggleTheme() {
+            if (localStorage.getItem('theme') === 'theme-dark') {
+                setTheme('theme-light');
+            } else {
+                setTheme('theme-dark');
+            }
+        }
+    </script>
+</body>
+
+</html>
